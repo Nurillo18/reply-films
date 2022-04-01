@@ -2,8 +2,58 @@ const elList = document.querySelector(".list");
 const elForm = document.querySelector(".form");
 const elSelect = document.querySelector(".form__select");
 const elButton = document.querySelector(".form__button");
+const elSavedList = document.querySelector(".saved-list");
 
 
+
+
+let savedArr = [];
+
+elSavedList.addEventListener("click", (ev) => {
+    const saveIDIs = ev.target.matches(".save-delete");
+    if(saveIDIs){
+        const svID = Number(ev.target.dataset.saveID);
+        const findSvId = savedArr.findIndex(e => e.id == svID);
+        savedArr.splice(findSvId,1);
+        rederSavedArr(savedArr,elSavedList)
+    }
+
+});
+
+function rederSavedArr(arr, element) {
+    element.innerHTML = "";
+    arr.forEach(save => {
+        const saveItem = document.createElement("li");
+        const saveDelete = document.createElement("button");
+
+        saveItem.textContent = save.title;
+        saveItem.classList.add("save-item");
+
+        saveDelete.classList.add("save-delete");
+        saveDelete.textContent = "Delete";
+        saveDelete.dataset.saveID = save.id;
+
+        element.appendChild(saveItem);
+        saveItem.appendChild(saveDelete);
+
+
+    });
+}
+
+elList.addEventListener("click", evt => {
+    const savedSpan = evt.target.matches(".span-img");
+    const moreBt = evt.target.matches(".more-btn");
+    if(savedSpan) {
+        const saved = evt.target.dataset.filmId;
+        const foundSaved = films.find(e => e.id == saved);
+
+        if(!savedArr.includes(foundSaved)){
+            savedArr.push(foundSaved);
+        };
+     };
+
+     rederSavedArr(savedArr,elSavedList)
+});
 
 function reder(basic , el){
     el.innerHTML = null;
@@ -13,18 +63,24 @@ function reder(basic , el){
         let elImg = document.createElement("img");
         let elTitle = document.createElement("h1");
         let elText = document.createElement("p");
-        let elTime = document.createElement("time");
-        let elText2 = document.createElement("p")
-
+        let elBtnMore = document.createElement("button");
+        let elSpan = document.createElement("span");
 
 
         el.appendChild(elItem);
         elItem.appendChild(elImg);
         elBox.appendChild(elTitle);
         elBox.appendChild(elText);
-        elBox.appendChild(elTime);
-        elBox.appendChild(elText2);
+        elBox.appendChild(elBtnMore);
+        elBox.appendChild(elSpan);
         elItem.appendChild(elBox);
+
+
+        elBtnMore.textContent = "More";
+        elBtnMore.classList.add("more-btn");
+
+        elSpan.classList.add("span-img");
+        elSpan.dataset.filmId = film.id;
 
 
         elItem.classList.add("list__item");
@@ -40,11 +96,6 @@ function reder(basic , el){
         elText.textContent = film.overview.split(" ").slice(0 ,15).join(" ")
         elText.classList.add("list__text");
 
-        elTime.textContent = bigda();
-        elTime.classList.add("list__time");
-
-        elText2.textContent = film.genres;
-        elText2.classList.add("list__text2")
 
 
         function bigda(evt){
