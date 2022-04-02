@@ -3,11 +3,15 @@ const elForm = document.querySelector(".form");
 const elSelect = document.querySelector(".form__select");
 const elButton = document.querySelector(".form__button");
 const elSavedList = document.querySelector(".saved-list");
+const modal = document.querySelector(".modal");
+const cont = document.querySelector(".container");
+
 
 
 
 
 let savedArr = [];
+let modalArr = [];
 
 elSavedList.addEventListener("click", (ev) => {
     const saveIDIs = ev.target.matches(".save-delete");
@@ -17,7 +21,6 @@ elSavedList.addEventListener("click", (ev) => {
         savedArr.splice(findSvId,1);
         rederSavedArr(savedArr,elSavedList)
     }
-
 });
 
 function rederSavedArr(arr, element) {
@@ -50,9 +53,27 @@ elList.addEventListener("click", evt => {
         if(!savedArr.includes(foundSaved)){
             savedArr.push(foundSaved);
         };
-     };
 
-     rederSavedArr(savedArr,elSavedList)
+     };
+     if(moreBt){
+        modal.classList.add("del");
+        const moreBtnID = evt.target.dataset.moreID;
+        const findBtnIdMore = films.find(e => e.id == moreBtnID);
+
+        if(!modalArr.includes(findBtnIdMore)){
+
+            modalArr.push(findBtnIdMore);
+            const moreItem = document.createElement("li");
+
+            moreItem.textContent = findBtnIdMore.title;
+            moreItem.classList.add("more__item")
+
+            modal.appendChild(moreItem);
+        };
+
+     }
+
+     rederSavedArr(savedArr,elSavedList);
 });
 
 function reder(basic , el){
@@ -78,6 +99,7 @@ function reder(basic , el){
 
         elBtnMore.textContent = "More";
         elBtnMore.classList.add("more-btn");
+        elBtnMore.dataset.moreID = film.id;
 
         elSpan.classList.add("span-img");
         elSpan.dataset.filmId = film.id;
